@@ -1,629 +1,937 @@
 <!DOCTYPE html>
 <html lang="id">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sistem Data Wilayah indonesia </title>
-    <!-- Menggunakan Tailwind CSS untuk Desain Cepat & Bagus -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome untuk Ikon -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-    />
-    <style>
-      /* Animasi Loading sederhana */
-      .loader {
-        border-top-color: #3498db;
-        -webkit-animation: spinner 1.5s linear infinite;
-        animation: spinner 1.5s linear infinite;
-      }
-      @keyframes spinner {
-        0% {
-          transform: rotate(0deg);
-        }
-        100% {
-          transform: rotate(360deg);
-        }
-      }
-    </style>
-  </head>
-  <body class="bg-gray-100 font-sans antialiased text-gray-800">
-    <!-- 1. LOGIN SECTION -->
-    <div
-      id="login-section"
-      class="min-h-screen flex items-center justify-center transition-all duration-300"
-    >
-      <div class="bg-white p-8 rounded-lg shadow-lg w-96">
-        <div class="text-center mb-6">
-          <i class="fa-solid fa-map-location-dot text-4xl text-blue-600"></i>
-          <h2 class="text-2xl font-bold mt-2">Masuk Sistem</h2>
-          <p class="text-gray-500 text-sm">Akses Data Wilayah Regional</p>
-        </div>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>GeoData Admin Modern</title>
 
-        <form id="login-form" onsubmit="handleLogin(event)">
-          <div class="mb-4">
-            <label class="block text-sm font-bold mb-2">Email</label>
-            <input
-              type="email"
-              id="email"
-              class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="admin@example.com"
-              required
-            />
-          </div>
-          <div class="mb-6">
-            <label class="block text-sm font-bold mb-2">Password</label>
-            <input
-              type="password"
-              id="password"
-              class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="******"
-              required
-            />
-          </div>
-          <button
-            type="submit"
-            class="w-full bg-blue-600 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 transition duration-200"
-          >
-            Masuk
-          </button>
-        </form>
+        <!-- Google Fonts: Inter -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
 
-        <div class="mt-4 text-center">
-          <p class="text-sm text-gray-600">Belum punya akun?</p>
-          <button
-            onclick="showRegister()"
-            class="text-blue-600 font-bold hover:underline text-sm"
-          >
-            Daftar Sekarang
-          </button>
-        </div>
+        <!-- Tailwind CSS -->
+        <script src="https://cdn.tailwindcss.com"></script>
 
-        <div
-          id="login-error"
-          class="text-red-500 text-sm mt-3 text-center hidden"
-        ></div>
-      </div>
-    </div>
+        <!-- Font Awesome -->
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        />
 
-    <!-- 1.5. REGISTER SECTION (Hidden by default) -->
-    <div
-      id="register-section"
-      class="hidden min-h-screen flex items-center justify-center transition-all duration-300"
-    >
-      <div class="bg-white p-8 rounded-lg shadow-lg w-96">
-        <div class="text-center mb-6">
-          <i class="fa-solid fa-user-plus text-4xl text-green-600"></i>
-          <h2 class="text-2xl font-bold mt-2">Daftar Akun</h2>
-          <p class="text-gray-500 text-sm">Buat akun baru untuk akses</p>
-        </div>
+        <script>
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        fontFamily: {
+                            sans: ["Inter", "sans-serif"],
+                        },
+                        colors: {
+                            brand: {
+                                50: "#eef2ff",
+                                100: "#e0e7ff",
+                                500: "#6366f1", // Indigo
+                                600: "#4f46e5",
+                                700: "#4338ca",
+                                900: "#312e81",
+                            },
+                        },
+                    },
+                },
+            };
+        </script>
 
-        <form id="register-form" onsubmit="handleRegister(event)">
-          <div class="mb-4">
-            <label class="block text-sm font-bold mb-2">Nama Lengkap</label>
-            <input
-              type="text"
-              id="reg-name"
-              class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500"
-              placeholder="Sahryan Hikmal"
-              required
-            />
-          </div>
-          <div class="mb-4">
-            <label class="block text-sm font-bold mb-2">Email</label>
-            <input
-              type="email"
-              id="reg-email"
-              class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500"
-              placeholder="sahryan@example.com"
-              required
-            />
-          </div>
-          <div class="mb-6">
-            <label class="block text-sm font-bold mb-2">Password</label>
-            <input
-              type="password"
-              id="reg-password"
-              class="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500"
-              placeholder="Minimal 6 karakter"
-              required
-            />
-          </div>
-          <button
-            type="submit"
-            class="w-full bg-green-600 text-white font-bold py-2 px-4 rounded hover:bg-green-700 transition duration-200"
-          >
-            Daftar
-          </button>
-        </form>
-
-        <div class="mt-4 text-center">
-          <p class="text-sm text-gray-600">Sudah punya akun?</p>
-          <button
-            onclick="showLogin()"
-            class="text-blue-600 font-bold hover:underline text-sm"
-          >
-            Masuk di sini
-          </button>
-        </div>
-
-        <div
-          id="register-error"
-          class="text-red-500 text-sm mt-3 text-center hidden"
-        ></div>
-        <div
-          id="register-success"
-          class="text-green-500 text-sm mt-3 text-center hidden"
-        ></div>
-      </div>
-    </div>
-
-    <!-- 2. DASHBOARD SECTION (Hidden by default) -->
-    <div id="dashboard-section" class="hidden min-h-screen flex flex-col">
-      <!-- Navbar -->
-      <nav class="bg-white shadow-md p-4 flex justify-between items-center">
-        <div class="flex items-center gap-2">
-          <i class="fa-solid fa-map text-blue-600 text-xl"></i>
-          <h1 class="font-bold text-xl">GeoData Admin</h1>
-        </div>
-        <div class="flex items-center gap-4">
-          <span id="user-name" class="font-semibold text-gray-600">User</span>
-          <button
-            onclick="handleLogout()"
-            class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm"
-          >
-            <i class="fa-solid fa-sign-out-alt"></i> Logout
-          </button>
-        </div>
-      </nav>
-
-      <!-- Main Content -->
-      <main class="flex-grow p-6 container mx-auto">
-        <!-- Statistics Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div
-            class="bg-white p-6 rounded-lg shadow border-l-4 border-blue-500"
-          >
-            <h3 class="text-gray-500 text-sm font-bold uppercase">
-              Total Provinsi
-            </h3>
-            <p class="text-3xl font-bold mt-2" id="count-province">-</p>
-          </div>
-          <div
-            class="bg-white p-6 rounded-lg shadow border-l-4 border-green-500"
-          >
-            <h3 class="text-gray-500 text-sm font-bold uppercase">
-              Total Kota
-            </h3>
-            <p class="text-3xl font-bold mt-2" id="count-city">-</p>
-          </div>
-          <div
-            class="bg-white p-6 rounded-lg shadow border-l-4 border-purple-500"
-          >
-            <h3 class="text-gray-500 text-sm font-bold uppercase">
-              Total Kecamatan
-            </h3>
-            <p class="text-3xl font-bold mt-2" id="count-district">-</p>
-          </div>
-        </div>
-
-        <!-- Interactive Explorer -->
-        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-          <div class="bg-gray-50 p-4 border-b">
-            <h2 class="font-bold text-lg">
-              <i class="fa-solid fa-search"></i> Penelusuran Wilayah
-            </h2>
-            <p class="text-sm text-gray-500">
-              Pilih wilayah secara berurutan untuk melihat data.
-            </p>
-          </div>
-
-          <div class="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-            <!-- 1. Pilih Provinsi -->
-            <div>
-              <label class="block font-bold mb-2 text-blue-600"
-                >1. Pilih Provinsi</label
-              >
-              <select
-                id="select-province"
-                onchange="loadCities(this.value)"
-                class="w-full border p-2 rounded bg-white focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="">-- Pilih Provinsi --</option>
-              </select>
-              <div
-                class="mt-4 p-4 bg-blue-50 rounded hidden"
-                id="detail-province"
-              >
-                <h4 class="font-bold text-sm">Detail Provinsi:</h4>
-                <p id="info-province-name" class="text-lg"></p>
-                <span class="text-xs bg-blue-200 px-2 py-1 rounded"
-                  >ID: <span id="info-province-id"></span
-                ></span>
-              </div>
-            </div>
-
-            <!-- 2. Pilih Kota -->
-            <div
-              id="container-city"
-              class="opacity-50 pointer-events-none transition-opacity"
-            >
-              <label class="block font-bold mb-2 text-green-600"
-                >2. Pilih Kota/Kabupaten</label
-              >
-              <select
-                id="select-city"
-                onchange="loadDistricts(this.value)"
-                class="w-full border p-2 rounded bg-white focus:ring-2 focus:ring-green-500"
-              >
-                <option value="">-- Pilih Kota --</option>
-              </select>
-              <div class="mt-4 p-4 bg-green-50 rounded hidden" id="detail-city">
-                <h4 class="font-bold text-sm">Detail Kota:</h4>
-                <p id="info-city-name" class="text-lg"></p>
-                <span class="text-xs bg-green-200 px-2 py-1 rounded"
-                  >ID: <span id="info-city-id"></span
-                ></span>
-              </div>
-            </div>
-
-            <!-- 3. Daftar Kecamatan -->
-            <div
-              id="container-district"
-              class="opacity-50 pointer-events-none transition-opacity"
-            >
-              <label class="block font-bold mb-2 text-purple-600"
-                >3. Daftar Kecamatan</label
-              >
-              <div class="border rounded h-64 overflow-y-auto bg-gray-50 p-2">
-                <ul id="list-district" class="space-y-2">
-                  <li class="text-gray-400 text-center mt-10">
-                    Silakan pilih kota terlebih dahulu.
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      </main>
-    </div>
-
-    <!-- JAVASCRIPT LOGIC -->
-    <script>
-      // KONFIGURASI API (Sesuaikan dengan Port Laravel Anda)
-      const API_BASE_URL = "http://127.0.0.1:88/api";
-
-      // Cek Status Login saat halaman dibuka
-      document.addEventListener("DOMContentLoaded", () => {
-        const token = localStorage.getItem("api_token");
-        if (token) {
-          showDashboard();
-        } else {
-          showLogin();
-        }
-      });
-
-      // --- FUNGSI TAMPILAN ---
-      function showLogin() {
-        document.getElementById("login-section").classList.remove("hidden");
-        document.getElementById("register-section").classList.add("hidden");
-        document.getElementById("dashboard-section").classList.add("hidden");
-      }
-
-      function showRegister() {
-        document.getElementById("login-section").classList.add("hidden");
-        document.getElementById("register-section").classList.remove("hidden");
-        document.getElementById("dashboard-section").classList.add("hidden");
-      }
-
-      function showDashboard() {
-        document.getElementById("login-section").classList.add("hidden");
-        document.getElementById("register-section").classList.add("hidden");
-        document.getElementById("dashboard-section").classList.remove("hidden");
-        fetchUserProfile();
-        loadProvinces(); // Load data awal
-        updateStats();
-      }
-
-      // --- FUNGSI AUTH ---
-      async function handleLogin(e) {
-        e.preventDefault();
-        const email = document.getElementById("email").value;
-        const password = document.getElementById("password").value;
-        const errorDiv = document.getElementById("login-error");
-
-        try {
-          const response = await fetch(`${API_BASE_URL}/login`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded",
-              Accept: "application/json",
-            },
-            body: new URLSearchParams({ email, password }),
-          });
-
-          const result = await response.json();
-
-          if (response.ok) {
-            // --- PERBAIKAN DI SINI ---
-            // Server Anda mengirim 'access_token', BUKAN 'token'
-            if (result.data && result.data.access_token) {
-              localStorage.setItem("api_token", result.data.access_token); // <--- Ganti jadi access_token
-              console.log("Token tersimpan:", result.data.access_token);
-              showDashboard();
-            } else {
-              console.error(
-                "Token tidak ditemukan (Cek struktur JSON):",
-                result
-              );
-              errorDiv.innerText = "Login berhasil, tapi token tidak terbaca.";
-              errorDiv.classList.remove("hidden");
+        <style>
+            /* Custom Scrollbar */
+            ::-webkit-scrollbar {
+                width: 6px;
+                height: 6px;
             }
-          } else {
-            errorDiv.innerText = result.message || "Login Gagal"; // Menggunakan 'message' sesuai JSON Anda
-            errorDiv.classList.remove("hidden");
-          }
-        } catch (error) {
-          console.error(error);
-          alert("Gagal koneksi ke server.");
-        }
-      }
+            ::-webkit-scrollbar-track {
+                background: #f1f5f9;
+            }
+            ::-webkit-scrollbar-thumb {
+                background: #cbd5e1;
+                border-radius: 4px;
+            }
+            ::-webkit-scrollbar-thumb:hover {
+                background: #94a3b8;
+            }
 
-      async function handleRegister(e) {
-        e.preventDefault();
-        const name = document.getElementById("reg-name").value;
-        const email = document.getElementById("reg-email").value;
-        const password = document.getElementById("reg-password").value;
-        const errorDiv = document.getElementById("register-error");
-        const successDiv = document.getElementById("register-success");
+            .fade-in {
+                animation: fadeIn 0.3s ease-in-out;
+            }
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(10px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+        </style>
+    </head>
+    <body
+        class="bg-slate-50 text-slate-800 font-sans antialiased overflow-x-hidden"
+    >
+        <!-- ================= AUTH LAYOUT (Login/Register) ================= -->
+        <div
+            id="auth-layout"
+            class="min-h-screen flex items-center justify-center bg-gradient-to-br from-brand-600 to-purple-700 p-4 transition-all duration-300"
+        >
+            <!-- 1. LOGIN FORM -->
+            <div
+                id="login-section"
+                class="bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden fade-in"
+            >
+                <div class="p-8">
+                    <div class="text-center mb-8">
+                        <div
+                            class="bg-brand-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
+                        >
+                            <i
+                                class="fa-solid fa-earth-asia text-3xl text-brand-600"
+                            ></i>
+                        </div>
+                        <h2 class="text-3xl font-bold text-slate-800">
+                            Selamat Datang
+                        </h2>
+                        <p class="text-slate-500 mt-2">
+                            Masuk untuk mengelola data wilayah
+                        </p>
+                    </div>
 
-        // Reset pesan
-        errorDiv.classList.add("hidden");
-        successDiv.classList.add("hidden");
+                    <form onsubmit="handleLogin(event)" class="space-y-5">
+                        <div>
+                            <label
+                                class="block text-sm font-medium text-slate-700 mb-1"
+                                >Email Address</label
+                            >
+                            <div class="relative">
+                                <i
+                                    class="fa-solid fa-envelope absolute left-3 top-3.5 text-slate-400"
+                                ></i>
+                                <input
+                                    type="email"
+                                    id="email"
+                                    class="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent outline-none transition"
+                                    placeholder="admin@example.com"
+                                    required
+                                />
+                            </div>
+                        </div>
+                        <div>
+                            <label
+                                class="block text-sm font-medium text-slate-700 mb-1"
+                                >Password</label
+                            >
+                            <div class="relative">
+                                <i
+                                    class="fa-solid fa-lock absolute left-3 top-3.5 text-slate-400"
+                                ></i>
+                                <input
+                                    type="password"
+                                    id="password"
+                                    class="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent outline-none transition"
+                                    placeholder="••••••"
+                                    required
+                                />
+                            </div>
+                        </div>
+                        <button
+                            type="submit"
+                            class="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-3 rounded-lg shadow-lg shadow-brand-500/30 transition transform active:scale-95"
+                        >
+                            Masuk Dashboard
+                        </button>
+                    </form>
 
-        try {
-          const response = await fetch(`${API_BASE_URL}/register`, {
-            method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: new URLSearchParams({ name, email, password }),
-          });
+                    <div
+                        id="login-error"
+                        class="mt-4 p-3 bg-red-50 text-red-600 text-sm rounded-lg text-center hidden border border-red-100"
+                    ></div>
 
-          const result = await response.json();
+                    <div class="mt-6 text-center text-sm text-slate-500">
+                        Belum punya akun?
+                        <button
+                            onclick="toggleAuth('register')"
+                            class="text-brand-600 font-semibold hover:underline"
+                        >
+                            Daftar Sekarang
+                        </button>
+                    </div>
+                </div>
+            </div>
 
-          if (response.ok) {
-            successDiv.innerText = "Registrasi Berhasil! Mengalihkan...";
-            successDiv.classList.remove("hidden");
+            <!-- 2. REGISTER FORM -->
+            <div
+                id="register-section"
+                class="bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden hidden fade-in"
+            >
+                <div class="p-8">
+                    <div class="text-center mb-6">
+                        <h2 class="text-2xl font-bold text-slate-800">
+                            Buat Akun Baru
+                        </h2>
+                        <p class="text-slate-500">
+                            Bergabunglah dengan GeoData Admin
+                        </p>
+                    </div>
 
-            // Simpan token & Redirect
-            localStorage.setItem("api_token", result.data.token);
-            setTimeout(() => {
-              showDashboard();
-            }, 1500);
-          } else {
-            errorDiv.innerText = result.status || "Registrasi Gagal";
-            errorDiv.classList.remove("hidden");
-          }
-        } catch (error) {
-          alert("Gagal koneksi ke server.");
-        }
-      }
+                    <form onsubmit="handleRegister(event)" class="space-y-4">
+                        <div>
+                            <label
+                                class="block text-sm font-medium text-slate-700 mb-1"
+                                >Nama Lengkap</label
+                            >
+                            <input
+                                type="text"
+                                id="reg-name"
+                                class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"
+                                placeholder="John Doe"
+                                required
+                            />
+                        </div>
+                        <div>
+                            <label
+                                class="block text-sm font-medium text-slate-700 mb-1"
+                                >Email Address</label
+                            >
+                            <input
+                                type="email"
+                                id="reg-email"
+                                class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"
+                                placeholder="name@company.com"
+                                required
+                            />
+                        </div>
+                        <div>
+                            <label
+                                class="block text-sm font-medium text-slate-700 mb-1"
+                                >Password</label
+                            >
+                            <input
+                                type="password"
+                                id="reg-password"
+                                class="w-full px-4 py-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-brand-500 outline-none"
+                                placeholder="Min. 6 karakter"
+                                required
+                            />
+                        </div>
+                        <button
+                            type="submit"
+                            class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 rounded-lg shadow-lg shadow-emerald-500/30 transition transform active:scale-95"
+                        >
+                            Daftar Akun
+                        </button>
+                    </form>
 
-      async function handleLogout() {
-        const token = localStorage.getItem("api_token");
-        try {
-          await fetch(`${API_BASE_URL}/logout`, {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${token}`,
-              Accept: "application/json",
-            },
-          });
-        } catch (err) {
-          console.error(err);
-        }
+                    <div
+                        id="register-message"
+                        class="mt-4 hidden text-center text-sm p-2 rounded"
+                    ></div>
 
-        localStorage.removeItem("api_token");
-        showLogin();
-      }
+                    <div class="mt-6 text-center text-sm text-slate-500">
+                        Sudah punya akun?
+                        <button
+                            onclick="toggleAuth('login')"
+                            class="text-brand-600 font-semibold hover:underline"
+                        >
+                            Masuk disini
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-      async function fetchUserProfile() {
-        const token = localStorage.getItem("api_token");
-        const res = await fetch(`${API_BASE_URL}/user`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            Accept: "application/json",
-          },
-        });
-        const json = await res.json();
-        if (res.ok)
-          document.getElementById("user-name").innerText = json.data.name;
-      }
+        <!-- ================= DASHBOARD LAYOUT ================= -->
+        <div
+            id="dashboard-section"
+            class="hidden flex h-screen overflow-hidden bg-slate-50"
+        >
+            <!-- Sidebar -->
+            <aside
+                class="w-64 bg-white border-r border-slate-200 hidden md:flex flex-col z-10"
+            >
+                <div
+                    class="h-16 flex items-center px-6 border-b border-slate-100"
+                >
+                    <i
+                        class="fa-solid fa-map-location-dot text-2xl text-brand-600 mr-3"
+                    ></i>
+                    <span
+                        class="font-bold text-lg text-slate-800 tracking-tight"
+                        >GeoData</span
+                    >
+                </div>
 
-      // --- FUNGSI DATA WILAYAH (CORE LOGIC) ---
+                <nav class="flex-1 px-4 py-6 space-y-1">
+                    <a
+                        href="#"
+                        class="flex items-center px-4 py-3 bg-brand-50 text-brand-700 rounded-lg font-medium"
+                    >
+                        <i class="fa-solid fa-chart-pie w-6"></i> Dashboard
+                    </a>
+                    <a
+                        href="#"
+                        class="flex items-center px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900 rounded-lg transition"
+                    >
+                        <i class="fa-solid fa-database w-6"></i> Data Master
+                    </a>
+                    <a
+                        href="#"
+                        class="flex items-center px-4 py-3 text-slate-600 hover:bg-slate-50 hover:text-slate-900 rounded-lg transition"
+                    >
+                        <i class="fa-solid fa-gear w-6"></i> Pengaturan
+                    </a>
+                </nav>
 
-      // 1. Load Provinsi
-      async function loadProvinces() {
-        const token = localStorage.getItem("api_token");
-        const res = await fetch(`${API_BASE_URL}/province`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            Accept: "application/json",
-          },
-        });
-        const json = await res.json();
+                <div class="p-4 border-t border-slate-100">
+                    <button
+                        onclick="handleLogout()"
+                        class="flex items-center w-full px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg transition text-sm font-medium"
+                    >
+                        <i class="fa-solid fa-right-from-bracket w-6"></i>
+                        Keluar Aplikasi
+                    </button>
+                </div>
+            </aside>
 
-        const select = document.getElementById("select-province");
-        select.innerHTML = '<option value="">-- Pilih Provinsi --</option>';
+            <!-- Main Content -->
+            <div class="flex-1 flex flex-col h-screen overflow-hidden relative">
+                <!-- Topbar -->
+                <header
+                    class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 lg:px-8"
+                >
+                    <button
+                        class="md:hidden text-slate-500 hover:text-slate-700"
+                    >
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                    <div class="flex items-center gap-4 ml-auto">
+                        <div class="text-right hidden sm:block">
+                            <p
+                                class="text-sm font-semibold text-slate-700"
+                                id="user-name"
+                            >
+                                Memuat...
+                            </p>
+                            <p class="text-xs text-slate-500">Administrator</p>
+                        </div>
+                        <div
+                            class="w-10 h-10 rounded-full bg-brand-100 flex items-center justify-center text-brand-600 font-bold border border-brand-200"
+                        >
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                    </div>
+                </header>
 
-        if (json.data) {
-          json.data.forEach((prov) => {
-            const option = document.createElement("option");
-            option.value = prov.province_id;
-            option.text = prov.province_name;
-            select.appendChild(option);
-          });
-        }
-        // Reset Child
-        resetCity();
-      }
+                <!-- Scrollable Content -->
+                <main
+                    class="flex-1 overflow-x-hidden overflow-y-auto p-6 lg:p-8"
+                >
+                    <div class="max-w-7xl mx-auto">
+                        <h1 class="text-2xl font-bold text-slate-800 mb-6">
+                            Dashboard Overview
+                        </h1>
 
-      // 2. Load Kota (Dipanggil saat Provinsi dipilih)
-      async function loadCities(provinceId) {
-        if (!provinceId) {
-          resetCity();
-          return;
-        }
+                        <!-- Stats Grid -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                            <!-- Stat Card 1 -->
+                            <div
+                                class="bg-white rounded-xl p-6 shadow-sm border border-slate-100 flex items-center"
+                            >
+                                <div
+                                    class="p-4 rounded-full bg-blue-50 text-blue-600 mr-4"
+                                >
+                                    <i class="fa-solid fa-map text-xl"></i>
+                                </div>
+                                <div>
+                                    <p
+                                        class="text-sm text-slate-500 font-medium uppercase tracking-wider"
+                                    >
+                                        Provinsi
+                                    </p>
+                                    <p
+                                        class="text-2xl font-bold text-slate-800 mt-1"
+                                        id="count-province"
+                                    >
+                                        -
+                                    </p>
+                                </div>
+                            </div>
+                            <!-- Stat Card 2 -->
+                            <div
+                                class="bg-white rounded-xl p-6 shadow-sm border border-slate-100 flex items-center"
+                            >
+                                <div
+                                    class="p-4 rounded-full bg-emerald-50 text-emerald-600 mr-4"
+                                >
+                                    <i class="fa-solid fa-city text-xl"></i>
+                                </div>
+                                <div>
+                                    <p
+                                        class="text-sm text-slate-500 font-medium uppercase tracking-wider"
+                                    >
+                                        Kota/Kab
+                                    </p>
+                                    <p
+                                        class="text-2xl font-bold text-slate-800 mt-1"
+                                        id="count-city"
+                                    >
+                                        -
+                                    </p>
+                                </div>
+                            </div>
+                            <!-- Stat Card 3 -->
+                            <div
+                                class="bg-white rounded-xl p-6 shadow-sm border border-slate-100 flex items-center"
+                            >
+                                <div
+                                    class="p-4 rounded-full bg-purple-50 text-purple-600 mr-4"
+                                >
+                                    <i class="fa-solid fa-building text-xl"></i>
+                                </div>
+                                <div>
+                                    <p
+                                        class="text-sm text-slate-500 font-medium uppercase tracking-wider"
+                                    >
+                                        Kecamatan
+                                    </p>
+                                    <p
+                                        class="text-2xl font-bold text-slate-800 mt-1"
+                                        id="count-district"
+                                    >
+                                        -
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
 
-        // Tampilkan Detail Provinsi
-        const selectProv = document.getElementById("select-province");
-        document.getElementById("info-province-name").innerText =
-          selectProv.options[selectProv.selectedIndex].text;
-        document.getElementById("info-province-id").innerText = provinceId;
-        document.getElementById("detail-province").classList.remove("hidden");
+                        <!-- Explorer Section -->
+                        <div
+                            class="bg-white rounded-xl shadow-lg border border-slate-200 overflow-hidden"
+                        >
+                            <div
+                                class="bg-slate-50 px-6 py-4 border-b border-slate-200 flex items-center justify-between"
+                            >
+                                <div>
+                                    <h2
+                                        class="text-lg font-bold text-slate-800"
+                                    >
+                                        Penelusuran Wilayah
+                                    </h2>
+                                    <p class="text-sm text-slate-500">
+                                        Filter data bertingkat (Cascading)
+                                    </p>
+                                </div>
+                                <button
+                                    onclick="updateStats(); loadProvinces();"
+                                    class="text-brand-600 hover:text-brand-800 text-sm font-medium"
+                                >
+                                    <i
+                                        class="fa-solid fa-arrows-rotate mr-1"
+                                    ></i>
+                                    Refresh
+                                </button>
+                            </div>
 
-        // Aktifkan UI Kota
-        const containerCity = document.getElementById("container-city");
-        containerCity.classList.remove("opacity-50", "pointer-events-none");
+                            <div
+                                class="p-6 grid grid-cols-1 lg:grid-cols-3 gap-8"
+                            >
+                                <!-- STEP 1: PROVINCE -->
+                                <div class="relative">
+                                    <div
+                                        class="absolute -left-3 -top-3 w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-sm shadow-md z-10"
+                                    >
+                                        1
+                                    </div>
+                                    <div
+                                        class="bg-white border-2 border-blue-100 rounded-xl p-4 hover:border-blue-300 transition-colors h-full"
+                                    >
+                                        <label
+                                            class="block text-sm font-bold text-slate-700 mb-2"
+                                            >Pilih Provinsi</label
+                                        >
+                                        <select
+                                            id="select-province"
+                                            onchange="loadCities(this.value)"
+                                            class="w-full bg-slate-50 border border-slate-300 text-slate-800 rounded-lg p-2.5 focus:ring-blue-500 focus:border-blue-500 text-sm"
+                                        >
+                                            <option value="">
+                                                -- Memuat Data... --
+                                            </option>
+                                        </select>
 
-        const token = localStorage.getItem("api_token");
-        // PANGGIL API FILTER: /api/city/province/{id}
-        const res = await fetch(`${API_BASE_URL}/city/province/${provinceId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            Accept: "application/json",
-          },
-        });
-        const json = await res.json();
+                                        <!-- Detail Card -->
+                                        <div
+                                            id="detail-province"
+                                            class="hidden mt-4 bg-blue-50 rounded-lg p-4 border border-blue-100"
+                                        >
+                                            <div
+                                                class="text-xs text-blue-500 uppercase font-bold tracking-wider mb-1"
+                                            >
+                                                Terpilih
+                                            </div>
+                                            <div
+                                                class="text-lg font-bold text-blue-800"
+                                                id="info-province-name"
+                                            ></div>
+                                            <div
+                                                class="text-xs text-slate-500 mt-1"
+                                            >
+                                                ID System:
+                                                <span
+                                                    id="info-province-id"
+                                                ></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
-        const select = document.getElementById("select-city");
-        select.innerHTML = '<option value="">-- Pilih Kota --</option>';
+                                <!-- STEP 2: CITY -->
+                                <div
+                                    id="container-city"
+                                    class="relative opacity-50 pointer-events-none transition-all duration-300"
+                                >
+                                    <div
+                                        class="absolute -left-3 -top-3 w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold text-sm shadow-md z-10"
+                                    >
+                                        2
+                                    </div>
+                                    <div
+                                        class="bg-white border-2 border-emerald-100 rounded-xl p-4 hover:border-emerald-300 transition-colors h-full"
+                                    >
+                                        <label
+                                            class="block text-sm font-bold text-slate-700 mb-2"
+                                            >Pilih Kota/Kabupaten</label
+                                        >
+                                        <select
+                                            id="select-city"
+                                            onchange="loadDistricts(this.value)"
+                                            class="w-full bg-slate-50 border border-slate-300 text-slate-800 rounded-lg p-2.5 focus:ring-emerald-500 focus:border-emerald-500 text-sm"
+                                        >
+                                            <option value="">
+                                                -- Menunggu Provinsi --
+                                            </option>
+                                        </select>
 
-        if (res.ok && json.data) {
-          json.data.forEach((city) => {
-            const option = document.createElement("option");
-            option.value = city.city_id;
-            option.text = city.city_name;
-            select.appendChild(option);
-          });
-        } else {
-          select.innerHTML = '<option value="">-- Tidak ada kota --</option>';
-        }
-        resetDistrict();
-      }
+                                        <!-- Detail Card -->
+                                        <div
+                                            id="detail-city"
+                                            class="hidden mt-4 bg-emerald-50 rounded-lg p-4 border border-emerald-100"
+                                        >
+                                            <div
+                                                class="text-xs text-emerald-600 uppercase font-bold tracking-wider mb-1"
+                                            >
+                                                Terpilih
+                                            </div>
+                                            <div
+                                                class="text-lg font-bold text-emerald-800"
+                                                id="info-city-name"
+                                            ></div>
+                                            <div
+                                                class="text-xs text-slate-500 mt-1"
+                                            >
+                                                ID System:
+                                                <span id="info-city-id"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
-      // 3. Load Kecamatan (Dipanggil saat Kota dipilih)
-      async function loadDistricts(cityId) {
-        if (!cityId) {
-          resetDistrict();
-          return;
-        }
+                                <!-- STEP 3: DISTRICT -->
+                                <div
+                                    id="container-district"
+                                    class="relative opacity-50 pointer-events-none transition-all duration-300"
+                                >
+                                    <div
+                                        class="absolute -left-3 -top-3 w-8 h-8 rounded-full bg-purple-500 text-white flex items-center justify-center font-bold text-sm shadow-md z-10"
+                                    >
+                                        3
+                                    </div>
+                                    <div
+                                        class="bg-white border-2 border-purple-100 rounded-xl p-4 h-full flex flex-col"
+                                    >
+                                        <label
+                                            class="block text-sm font-bold text-slate-700 mb-2"
+                                            >Daftar Kecamatan</label
+                                        >
+                                        <div
+                                            class="flex-1 overflow-y-auto bg-slate-50 rounded-lg border border-slate-200 max-h-64 p-2 custom-scrollbar"
+                                        >
+                                            <ul
+                                                id="list-district"
+                                                class="space-y-2"
+                                            >
+                                                <li
+                                                    class="text-slate-400 text-sm text-center py-8 italic"
+                                                >
+                                                    Silakan pilih kota terlebih
+                                                    dahulu.
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
 
-        // Tampilkan Detail Kota
-        const selectCity = document.getElementById("select-city");
-        document.getElementById("info-city-name").innerText =
-          selectCity.options[selectCity.selectedIndex].text;
-        document.getElementById("info-city-id").innerText = cityId;
-        document.getElementById("detail-city").classList.remove("hidden");
+        <!-- JAVASCRIPT LOGIC (SAMA SEPERTI SEBELUMNYA, HANYA PENYESUAIAN KECIL) -->
+        <script>
+            const API_BASE_URL = "http://127.0.0.1:88/api";
 
-        // Aktifkan UI Kecamatan
-        const containerDist = document.getElementById("container-district");
-        containerDist.classList.remove("opacity-50", "pointer-events-none");
+            // --- INIT ---
+            document.addEventListener("DOMContentLoaded", () => {
+                const token = localStorage.getItem("api_token");
+                if (token) {
+                    showDashboard();
+                } else {
+                    toggleAuth("login");
+                }
+            });
 
-        const token = localStorage.getItem("api_token");
-        // PANGGIL API FILTER: /api/district/city/{id}
-        const res = await fetch(`${API_BASE_URL}/district/city/${cityId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            Accept: "application/json",
-          },
-        });
-        const json = await res.json();
+            // --- UI TOGGLES ---
+            function toggleAuth(type) {
+                document
+                    .getElementById("dashboard-section")
+                    .classList.add("hidden");
+                document
+                    .getElementById("auth-layout")
+                    .classList.remove("hidden");
 
-        const list = document.getElementById("list-district");
-        list.innerHTML = "";
+                if (type === "login") {
+                    document
+                        .getElementById("login-section")
+                        .classList.remove("hidden");
+                    document
+                        .getElementById("register-section")
+                        .classList.add("hidden");
+                } else {
+                    document
+                        .getElementById("login-section")
+                        .classList.add("hidden");
+                    document
+                        .getElementById("register-section")
+                        .classList.remove("hidden");
+                }
+            }
 
-        if (res.ok && json.data) {
-          json.data.forEach((dist) => {
-            const li = document.createElement("li");
-            li.className =
-              "bg-white p-2 rounded shadow-sm border border-gray-200 flex justify-between items-center";
-            li.innerHTML = `<span>${dist.district_name}</span> <span class="text-xs text-gray-400">#${dist.district_code}</span>`;
-            list.appendChild(li);
-          });
-        } else {
-          list.innerHTML =
-            '<li class="text-red-500 text-center">Tidak ada data kecamatan.</li>';
-        }
-      }
+            function showDashboard() {
+                document.getElementById("auth-layout").classList.add("hidden");
+                document
+                    .getElementById("dashboard-section")
+                    .classList.remove("hidden");
+                fetchUserProfile();
+                loadProvinces();
+                updateStats();
+            }
 
-      // --- UTILS ---
-      function resetCity() {
-        document.getElementById("select-city").innerHTML =
-          '<option value="">-- Pilih Kota --</option>';
-        document
-          .getElementById("container-city")
-          .classList.add("opacity-50", "pointer-events-none");
-        document.getElementById("detail-province").classList.add("hidden");
-        resetDistrict();
-      }
+            // --- AUTH LOGIC ---
+            async function handleLogin(e) {
+                e.preventDefault();
+                const email = document.getElementById("email").value;
+                const password = document.getElementById("password").value;
+                const errorDiv = document.getElementById("login-error");
 
-      function resetDistrict() {
-        document.getElementById("list-district").innerHTML =
-          '<li class="text-gray-400 text-center mt-10">Silakan pilih kota terlebih dahulu.</li>';
-        document
-          .getElementById("container-district")
-          .classList.add("opacity-50", "pointer-events-none");
-        document.getElementById("detail-city").classList.add("hidden");
-      }
+                // Animasi button loading (opsional)
+                const btn = e.target.querySelector("button");
+                const originalText = btn.innerText;
+                btn.innerText = "Memproses...";
+                btn.disabled = true;
 
-      async function updateStats() {
-        // Ini contoh saja, idealnya buat endpoint khusus stats di Laravel
-        // Di sini kita hitung manual via GET ALL (Kurang efisien tapi oke untuk demo)
-        const token = localStorage.getItem("api_token");
+                try {
+                    const response = await fetch(`${API_BASE_URL}/login`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded",
+                            Accept: "application/json",
+                        },
+                        body: new URLSearchParams({ email, password }),
+                    });
 
-        fetch(`${API_BASE_URL}/province`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            Accept: "application/json",
-          },
-        })
-          .then((r) => r.json())
-          .then(
-            (d) =>
-              (document.getElementById("count-province").innerText = d.data
-                ? d.data.length
-                : 0)
-          );
+                    const result = await response.json();
 
-        fetch(`${API_BASE_URL}/city`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            Accept: "application/json",
-          },
-        })
-          .then((r) => r.json())
-          .then(
-            (d) =>
-              (document.getElementById("count-city").innerText = d.data
-                ? d.data.length
-                : 0)
-          );
+                    if (
+                        response.ok &&
+                        result.data &&
+                        result.data.access_token
+                    ) {
+                        localStorage.setItem(
+                            "api_token",
+                            result.data.access_token
+                        );
+                        showDashboard();
+                    } else {
+                        errorDiv.innerText =
+                            result.message ||
+                            "Login Gagal. Periksa email/password.";
+                        errorDiv.classList.remove("hidden");
+                    }
+                } catch (error) {
+                    alert("Gagal koneksi ke server.");
+                } finally {
+                    btn.innerText = originalText;
+                    btn.disabled = false;
+                }
+            }
 
-        fetch(`${API_BASE_URL}/district`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            Accept: "application/json",
-          },
-        })
-          .then((r) => r.json())
-          .then(
-            (d) =>
-              (document.getElementById("count-district").innerText = d.data
-                ? d.data.length
-                : 0)
-          );
-      }
-    </script>
-  </body>
+            async function handleRegister(e) {
+                e.preventDefault();
+                const name = document.getElementById("reg-name").value;
+                const email = document.getElementById("reg-email").value;
+                const password = document.getElementById("reg-password").value;
+                const msgDiv = document.getElementById("register-message");
+
+                try {
+                    const response = await fetch(`${API_BASE_URL}/register`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/x-www-form-urlencoded",
+                            Accept: "application/json",
+                        },
+                        body: new URLSearchParams({ name, email, password }),
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok) {
+                        msgDiv.className =
+                            "mt-4 text-center text-sm p-2 rounded bg-green-100 text-green-700 block";
+                        msgDiv.innerText =
+                            "Registrasi Berhasil! Login otomatis...";
+                        localStorage.setItem("api_token", result.data.token);
+                        setTimeout(() => showDashboard(), 1500);
+                    } else {
+                        msgDiv.className =
+                            "mt-4 text-center text-sm p-2 rounded bg-red-100 text-red-700 block";
+                        msgDiv.innerText = result.status || "Gagal Mendaftar";
+                    }
+                } catch (error) {
+                    console.error(error);
+                }
+            }
+
+            async function handleLogout() {
+                const token = localStorage.getItem("api_token");
+                try {
+                    await fetch(`${API_BASE_URL}/logout`, {
+                        method: "POST",
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                            Accept: "application/json",
+                        },
+                    });
+                } catch (e) {}
+                localStorage.removeItem("api_token");
+                toggleAuth("login");
+            }
+
+            async function fetchUserProfile() {
+                const token = localStorage.getItem("api_token");
+                const res = await fetch(`${API_BASE_URL}/user`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        Accept: "application/json",
+                    },
+                });
+                const json = await res.json();
+                if (res.ok)
+                    document.getElementById("user-name").innerText =
+                        json.data.name;
+            }
+
+            // --- DATA LOGIC ---
+
+            async function loadProvinces() {
+                const token = localStorage.getItem("api_token");
+                const res = await fetch(`${API_BASE_URL}/province`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        Accept: "application/json",
+                    },
+                });
+                const json = await res.json();
+
+                const select = document.getElementById("select-province");
+                select.innerHTML =
+                    '<option value="">-- Pilih Provinsi --</option>';
+
+                if (json.data) {
+                    json.data.forEach((prov) => {
+                        const opt = document.createElement("option");
+                        opt.value = prov.province_id;
+                        opt.text = prov.province_name;
+                        select.appendChild(opt);
+                    });
+                }
+                resetCity();
+            }
+
+            async function loadCities(provId) {
+                if (!provId) {
+                    resetCity();
+                    return;
+                }
+
+                // UI Updates
+                const sel = document.getElementById("select-province");
+                document.getElementById("info-province-name").innerText =
+                    sel.options[sel.selectedIndex].text;
+                document.getElementById("info-province-id").innerText = provId;
+                document
+                    .getElementById("detail-province")
+                    .classList.remove("hidden");
+                document
+                    .getElementById("container-city")
+                    .classList.remove("opacity-50", "pointer-events-none");
+
+                // Fetch
+                const token = localStorage.getItem("api_token");
+                const res = await fetch(
+                    `${API_BASE_URL}/city/province/${provId}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                            Accept: "application/json",
+                        },
+                    }
+                );
+                const json = await res.json();
+
+                const select = document.getElementById("select-city");
+                select.innerHTML = '<option value="">-- Pilih Kota --</option>';
+
+                if (res.ok && json.data) {
+                    json.data.forEach((city) => {
+                        const opt = document.createElement("option");
+                        opt.value = city.city_id;
+                        opt.text = city.city_name;
+                        select.appendChild(opt);
+                    });
+                } else {
+                    select.innerHTML =
+                        '<option value="">-- Tidak ada kota --</option>';
+                }
+                resetDistrict();
+            }
+
+            async function loadDistricts(cityId) {
+                if (!cityId) {
+                    resetDistrict();
+                    return;
+                }
+
+                // UI Updates
+                const sel = document.getElementById("select-city");
+                document.getElementById("info-city-name").innerText =
+                    sel.options[sel.selectedIndex].text;
+                document.getElementById("info-city-id").innerText = cityId;
+                document
+                    .getElementById("detail-city")
+                    .classList.remove("hidden");
+                document
+                    .getElementById("container-district")
+                    .classList.remove("opacity-50", "pointer-events-none");
+
+                // Fetch
+                const token = localStorage.getItem("api_token");
+                const res = await fetch(
+                    `${API_BASE_URL}/district/city/${cityId}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                            Accept: "application/json",
+                        },
+                    }
+                );
+                const json = await res.json();
+
+                const list = document.getElementById("list-district");
+                list.innerHTML = "";
+
+                if (res.ok && json.data) {
+                    json.data.forEach((dist) => {
+                        const li = document.createElement("li");
+                        li.className =
+                            "flex justify-between items-center p-3 bg-white border border-slate-200 rounded-lg hover:border-purple-300 hover:shadow-sm transition";
+                        li.innerHTML = `
+                        <span class="font-medium text-slate-700">${
+                            dist.district_name || dist.name
+                        }</span>
+                        <span class="text-xs bg-slate-100 text-slate-500 px-2 py-1 rounded">#${
+                            dist.district_code || dist.code
+                        }</span>
+                    `;
+                        list.appendChild(li);
+                    });
+                } else {
+                    list.innerHTML =
+                        '<li class="text-red-500 text-sm text-center py-4">Tidak ada data kecamatan.</li>';
+                }
+            }
+
+            function resetCity() {
+                document.getElementById("select-city").innerHTML =
+                    '<option value="">-- Menunggu Provinsi --</option>';
+                document
+                    .getElementById("container-city")
+                    .classList.add("opacity-50", "pointer-events-none");
+                document
+                    .getElementById("detail-province")
+                    .classList.add("hidden");
+                resetDistrict();
+            }
+
+            function resetDistrict() {
+                document.getElementById("list-district").innerHTML =
+                    '<li class="text-slate-400 text-sm text-center py-8 italic">Silakan pilih kota terlebih dahulu.</li>';
+                document
+                    .getElementById("container-district")
+                    .classList.add("opacity-50", "pointer-events-none");
+                document.getElementById("detail-city").classList.add("hidden");
+            }
+
+            async function updateStats() {
+                const token = localStorage.getItem("api_token");
+                const headers = {
+                    Authorization: `Bearer ${token}`,
+                    Accept: "application/json",
+                };
+
+                fetch(`${API_BASE_URL}/province`, { headers })
+                    .then((r) => r.json())
+                    .then(
+                        (d) =>
+                            (document.getElementById(
+                                "count-province"
+                            ).innerText = d.data ? d.data.length : 0)
+                    );
+                fetch(`${API_BASE_URL}/city`, { headers })
+                    .then((r) => r.json())
+                    .then(
+                        (d) =>
+                            (document.getElementById("count-city").innerText =
+                                d.data ? d.data.length : 0)
+                    );
+                fetch(`${API_BASE_URL}/district`, { headers })
+                    .then((r) => r.json())
+                    .then(
+                        (d) =>
+                            (document.getElementById(
+                                "count-district"
+                            ).innerText = d.data ? d.data.length : 0)
+                    );
+            }
+        </script>
+    </body>
 </html>
