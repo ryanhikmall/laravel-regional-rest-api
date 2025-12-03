@@ -28,11 +28,7 @@ Aplikasi Web Service RESTful untuk mengelola data wilayah administratif Indonesi
 
 ### 1. Dashboard UI
 
-_(Anda bisa upload screenshot dashboard Anda ke sini nanti)_
-
 ### 2. API Response (Postman)
-
-_(Screenshot JSON response yang sukses)_
 
 ## 🚀 Cara Instalasi
 
