@@ -22,7 +22,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::middleware(['auth:sanctum'])->group(function () {
     
     // Auth Check
-    Route::get('user', [AuthController::class, 'me']);
+    Route::get('me', [AuthController::class, 'me']);
     
     // Logout (Gunakan POST agar lebih aman, atau GET jika dipaksa modul)
     Route::post('/logout', [AuthController::class, 'logout']); 
