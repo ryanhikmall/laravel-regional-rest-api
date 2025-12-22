@@ -9,16 +9,13 @@ use App\Models\LogModel;
 use App\Helpers\ApiFormatter;
 use Exception;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Illuminate\Auth\AuthenticationException;
-
 
 class Handler extends ExceptionHandler
 {
-    // ... properti $levels, $dontReport, $dontFlash biarkan default ...
+    // ... properti default ...
 
     public function render($request, Throwable $exception)
     {
-        // Tangani Error 404 (Not Found)
         if ($exception instanceof NotFoundHttpException) {
             $user = null;
             try {
@@ -29,16 +26,19 @@ class Handler extends ExceptionHandler
 
             $filteredRequest = ApiFormatter::filterSensitiveData($request->all());
 
+            // PERBAIKAN: Gunakan getContent() karena createJson sekarang return Object
+            $responseObject = ApiFormatter::createJson(404, 'Not Found', 'Route not found.');
+            
             LogModel::create([
                 'user_id' => $user ? $user->id : null,
                 'log_method' => $request->method(),
                 'log_url' => $request->fullUrl(),
                 'log_ip' => $request->ip(),
                 'log_request' => json_encode($filteredRequest),
-                'log_response' => json_encode(ApiFormatter::createJson(404, 'Not Found', 'Route not found.')),
+                'log_response' => $responseObject->getContent(), // Ambil isi JSON string-nya
             ]);
 
-            return response()->json(ApiFormatter::createJson(404, 'Not Found', 'Route not found.'), 404);
+            return $responseObject;
         }
 
         return parent::render($request, $exception);
