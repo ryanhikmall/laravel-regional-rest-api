@@ -9,6 +9,8 @@ use App\Models\LogModel;
 use App\Helpers\ApiFormatter;
 use Exception;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Illuminate\Auth\AuthenticationException;
+
 
 class Handler extends ExceptionHandler
 {

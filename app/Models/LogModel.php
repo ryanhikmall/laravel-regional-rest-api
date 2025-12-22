@@ -2,40 +2,26 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use DateTimeInterface;
+use Illuminate\Database\Eloquent\Model;
 
 class LogModel extends Model
 {
     use HasFactory;
-    use SoftDeletes;
 
+    // 1. Karena nama tabel kamu 'log' (bukan logs), wajib tulis ini:
     protected $table = 'log';
+
+    // 2. Karena primary key kamu 'log_id' (bukan id), wajib tulis ini:
     protected $primaryKey = 'log_id';
 
+    // 3. Kolom yang boleh diisi (sesuai screenshot kamu)
     protected $fillable = [
-        'log_id', 
-        'user_id', 
-        'log_method', 
-        'log_url', 
-        'log_ip', 
-        'log_request', 
+        'user_id',
+        'log_method',
+        'log_url',
+        'log_ip',
+        'log_request',
         'log_response'
     ];
-
-    protected $hidden = [
-        'created_at', 
-        'updated_at', 
-        'deleted_at'
-    ];
-
-    /**
-     * Prepare a date for array / JSON serialization.
-     */
-    protected function serializeDate(DateTimeInterface $date)
-    {
-        return $date->format('Y-m-d H:i:s');
-    }
 }

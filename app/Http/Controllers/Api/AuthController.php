@@ -82,7 +82,8 @@ class AuthController extends Controller
             ], 401);
         }
 
-        return $this->respondWithToken($token);
+        return $this->respondWithToken($token, 'Login success');
+
     }
 
     /**
@@ -121,24 +122,28 @@ class AuthController extends Controller
     /**
      * Refresh Token
      */
-    public function refresh()
-    {
-        return $this->respondWithToken(auth()->guard('api')->refresh());
-    }
+   public function refresh()
+{
+    return $this->respondWithToken(
+        auth()->guard('api')->refresh(),
+        'Token berhasil diperbarui'
+    );
+}
+
 
     /**
      * Helper response token
      */
-    protected function respondWithToken($token)
-    {
-        return response()->json([
-            'code' => 200,
-            'message' => 'Login Success',
-            'data' => [
-                'access_token' => $token,
-                'token_type' => 'bearer',
-                'expires_in' => auth()->guard('api')->factory()->getTTL() * 60
-            ]
-        ]);
-    }
+    protected function respondWithToken($token, $message = 'Login Success')
+{
+    return response()->json([
+        'code' => 200,
+        'message' => $message,
+        'data' => [
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => auth()->guard('api')->factory()->getTTL() * 60
+        ]
+    ]);
+}
 }

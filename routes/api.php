@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\ProvinceController;
 use App\Http\Controllers\Api\CityController;
 use App\Http\Controllers\Api\DistrictController;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\LogController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,10 +26,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('me', [AuthController::class, 'me']);
     
     // Logout (Gunakan POST agar lebih aman, atau GET jika dipaksa modul)
-    Route::post('/logout', [AuthController::class, 'logout']); 
+    Route::post('/logout', [AuthController::class, 'logout']);
     
     // Refresh (Hanya jika Anda sudah buat fungsinya di AuthController)
-    // Route::post('/refresh', [AuthController::class, 'refresh']); 
+     Route::post('/refresh', [AuthController::class, 'refresh']); 
 
     // --- DATA MASTER ---
     
@@ -54,4 +55,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('district/{id}', [DistrictController::class, 'detail']); 
     Route::put('district/{id}', [DistrictController::class, 'update']); 
     Route::delete('district/{id}', [DistrictController::class, 'delete']); 
+
+    //log 
+    Route::get('/log', [LogController::class, 'index']);
 });
+
+
